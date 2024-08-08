@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\ResponsesHelper;
 use App\Helpers\SlugHelper;
 use App\Http\Requests\Locations\CreateLocationsRequest;
+use App\Http\Requests\Locations\UpdateLocationsRequest;
 use App\Models\Locations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -71,6 +72,35 @@ class LocationsController extends Controller
             Log::error('|' . $request->header('x-transaction-id') . '|Erro ao criar buscar a localização', ['error' => $e->getMessage()]);
 
             return ResponsesHelper::ERROR('Ocorreu um erro ao buscar a localização', null, -1000, 400);
+        }
+    }
+
+    public function update(UpdateLocationsRequest $request, $id)
+    {
+        $validated = $request->validated();
+
+        $getLocation = Locations::find($id);
+
+        if (!$getLocation) {
+            return ResponsesHelper::ERROR('A localização informada não consta em nossos registros!', null, 1000, 404);
+        }
+
+        if ($request->has('slug')) {
+            $formatedSlug = SlugHelper::format_slug($request->slug);
+
+            $validated['slug'] = $formatedSlug;
+        }
+
+        try {
+            $getLocation->update($validated);
+            $getLocation->save();
+
+            return ResponsesHelper::SUCCESS('Localização atualizada com sucesso!', $getLocation, 200);
+        }
+        catch (\Exception $e) {
+            Log::error('|' . $request->header('x-transaction-id') . '|Erro ao criar atualizar a localização', ['error' => $e->getMessage()]);
+
+            return ResponsesHelper::ERROR('Ocorreu um erro ao tentar atualizar a localização', null, -1000, 400);
         }
     }
 }

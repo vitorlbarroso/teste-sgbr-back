@@ -4,7 +4,7 @@ namespace App\Http\Requests\Locations;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateLocationsRequest extends FormRequest
+class UpdateLocationsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,29 +22,29 @@ class CreateLocationsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
+            'name' => 'string|min:1|max:255',
+            'slug' => 'string|min:1|max:255',
+            'city' => 'string|min:1|max:255',
+            'state' => 'string|min:1|max:255',
         ];
     }
 
     public function messages(){
         return [
-            'name.required' => 'O campo "name" é obrigatório!',
             'name.string' => 'O campo "name" deverá ser do tipo string!',
+            'name.min' => 'O campo "name" deverá conter no mínimo 1 caractere!',
             'name.max' => 'O campo "name" deverá conter no mínimo 1 caractere!',
 
-            'slug.required' => 'O campo "slug" é obrigatório!',
             'slug.string' => 'O campo "slug" deverá ser do tipo string!',
+            'slug.min' => 'O campo "slug" deverá conter no mínimo 1 caractere!',
             'slug.max' => 'O campo "slug" deverá conter no mínimo 1 caractere!',
 
-            'city.required' => 'O campo "city" é obrigatório!',
             'city.string' => 'O campo "city" deverá ser do tipo string!',
+            'city.min' => 'O campo "city" deverá conter no mínimo 1 caractere!',
             'city.max' => 'O campo "city" deverá conter no mínimo 1 caractere!',
 
-            'state.required' => 'O campo "state" é obrigatório!',
             'state.string' => 'O campo "state" deverá ser do tipo string!',
+            'state.min' => 'O campo "state" deverá conter no mínimo 1 caractere!',
             'state.max' => 'O campo "state" deverá conter no mínimo 1 caractere!',
         ];
     }
