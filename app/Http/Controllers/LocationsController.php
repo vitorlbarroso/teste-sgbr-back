@@ -33,4 +33,26 @@ class LocationsController extends Controller
             return ResponsesHelper::ERROR('Ocorreu um erro ao tentar criar a localização', null, -1000, 400);
         }
     }
+
+    public function index(Request $request)
+    {
+        $itemsPerPage = $request->query('items_per_page', 10);
+        $termsFilter = $request->query('filter', '');
+
+        try {
+            $getLocations = Locations::where(function($query) use ($termsFilter) {
+                    $query->where('name', 'LIKE', "%$termsFilter%")
+                        ->orWhere('slug', 'LIKE', "%$termsFilter%");
+                })
+                ->orderBy('id', 'desc')
+                ->paginate($itemsPerPage);
+
+            return ResponsesHelper::SUCCESS('', $getLocations, 200);
+        }
+        catch (\Exception $e) {
+            Log::error('|' . $request->header('x-transaction-id') . '|Erro ao criar buscar as localizações', ['error' => $e->getMessage()]);
+
+            return ResponsesHelper::ERROR('Ocorreu um erro ao buscar as localizações', null, -1000, 400);
+        }
+    }
 }

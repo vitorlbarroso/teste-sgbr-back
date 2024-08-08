@@ -17,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('locations')->group(function() {
     Route::post('/', [LocationsController::class, 'store']);
+    Route::get('/', [LocationsController::class, 'index']);
 });
