@@ -31,11 +31,11 @@ services:
     db:
         build:
             context: ./docker/postgres
-        container_name: postgres_db
+        container_name: vitorlbarroso_sgbr
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: 123456789
-            POSTGRES_DB: teste_sgbr
+            POSTGRES_DB: vitorlbarroso_test_sgbr
         ports:
             - "5432:5432"
         volumes:
