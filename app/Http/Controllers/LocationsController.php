@@ -55,4 +55,22 @@ class LocationsController extends Controller
             return ResponsesHelper::ERROR('Ocorreu um erro ao buscar as localizações', null, -1000, 400);
         }
     }
+
+    public function show(Request $request, $id)
+    {
+        try {
+            $getLocation = Locations::find($id);
+
+            if (!$getLocation) {
+                return ResponsesHelper::ERROR('A localização informada não consta em nossos registros!', null, 1000, 404);
+            }
+
+            return ResponsesHelper::SUCCESS('', $getLocation, 200);
+        }
+        catch (\Exception $e) {
+            Log::error('|' . $request->header('x-transaction-id') . '|Erro ao criar buscar a localização', ['error' => $e->getMessage()]);
+
+            return ResponsesHelper::ERROR('Ocorreu um erro ao buscar a localização', null, -1000, 400);
+        }
+    }
 }
